@@ -290,9 +290,7 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
       
       const dockerfile = fs.readFileSync(dockerfilePath, 'utf8')
 
-      dockerfile.replace('ghcr.io/hongfs/env:', 'registry.cn-hongkong.aliyuncs.com/hongfs/env:')
-
-      fs.writeFileSync(dockerfilePath, dockerfile, 'utf8')
+      fs.writeFileSync(dockerfilePath, dockerfile.replace('ghcr.io/hongfs/env:', 'registry.cn-hongkong.aliyuncs.com/hongfs/env:'), 'utf8')
     }
   }
 
