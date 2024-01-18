@@ -1577,9 +1577,13 @@ function downloadRepository(authToken, owner, repo, ref, commit, repositoryPath,
             if (fsHelper.fileExistsSync(dockerfilePath)) {
                 // 替换文件内容
                 core.info(`Dockerfile文件存在，开始替换内容`);
-                const dockerfile = fs.readFileSync(dockerfilePath, 'utf8');
+                let dockerfile = fs.readFileSync(dockerfilePath, 'utf8');
                 let image = 'registry-vpc.cn-hongkong.aliyuncs.com/hongfs/env:';
-                fs.writeFileSync(dockerfilePath, dockerfile.replace('ghcr.io/hongfs/env:', image), 'utf8');
+                for (let i = 0; i < 100; i++) {
+                    // 为什么没有 g
+                    dockerfile = dockerfile.replace('ghcr.io/hongfs/env:', image);
+                }
+                fs.writeFileSync(dockerfilePath, dockerfile, 'utf8');
             }
         }
         core.endGroup();
