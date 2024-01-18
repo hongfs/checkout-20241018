@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import * as core from '@actions/core'
 import * as fs from 'fs'
+import * as fsHelper from './fs-helper'
 import * as github from '@actions/github'
 import * as io from '@actions/io'
 import * as path from 'path'
@@ -72,6 +73,27 @@ export async function downloadRepository(
     }
   }
   await io.rmRF(extractPath)
+
+  core.startGroup('开始处理文件')
+
+  if (fsHelper.directoryExistsSync(repositoryPath)) {
+    core.info(`文件夹存在，开始处理`)
+
+    const dockerfilePath = path.join(repositoryPath, 'Dockerfile')
+
+    if (fsHelper.fileExistsSync(dockerfilePath)) {
+      // 替换文件内容
+      core.info(`Dockerfile文件存在，开始替换内容`)
+
+      const dockerfile = fs.readFileSync(dockerfilePath, 'utf8')
+
+      let image = 'registry-vpc.cn-hongkong.aliyuncs.com/hongfs/env:';
+
+      fs.writeFileSync(dockerfilePath, dockerfile.replace('ghcr.io/hongfs/env:', image), 'utf8')
+    }
+  }
+
+  core.endGroup()
 }
 
 /**

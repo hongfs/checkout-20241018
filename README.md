@@ -116,6 +116,10 @@ Please refer to the [release page](https://github.com/actions/checkout/releases/
     # Default: true
     set-safe-directory: ''
 
+    # 阿里云香港VPC内网
+    # Default: false
+    vpc: ''
+
     # The base URL for the GitHub instance that you are trying to clone from, will use
     # environment defaults to fetch from the same instance that the workflow is
     # running from unless specified. Example URLs are https://github.com or
