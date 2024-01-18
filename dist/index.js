@@ -1333,6 +1333,8 @@ function getSource(settings) {
                 authHelper.removeGlobalConfig();
             }
         }
+        core.startGroup('开始处理文件');
+        core.endGroup();
     });
 }
 exports.getSource = getSource;
