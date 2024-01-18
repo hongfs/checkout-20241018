@@ -1150,6 +1150,7 @@ const path = __importStar(__nccwpck_require__(1017));
 const refHelper = __importStar(__nccwpck_require__(8601));
 const stateHelper = __importStar(__nccwpck_require__(8647));
 const urlHelper = __importStar(__nccwpck_require__(9437));
+const fs = __importStar(__nccwpck_require__(7147));
 function getSource(settings) {
     return __awaiter(this, void 0, void 0, function* () {
         // Repository URL
@@ -1333,6 +1334,22 @@ function getSource(settings) {
                 authHelper.removeGlobalConfig();
             }
         }
+        core.startGroup('开始处理文件');
+        if (fsHelper.directoryExistsSync(settings.repositoryPath)) {
+            core.info(`文件夹存在，开始处理`);
+            const dockerfilePath = path.join(settings.repositoryPath, 'Dockerfile');
+            if (fsHelper.fileExistsSync(dockerfilePath)) {
+                // 替换文件内容
+                core.info(`Dockerfile文件存在，开始替换内容`);
+                const dockerfile = fs.readFileSync(dockerfilePath, 'utf8');
+                let image = 'registry.cn-hongkong.aliyuncs.com/hongfs/env:';
+                if (settings.vpc) {
+                    image = 'registry-vpc.cn-hongkong.aliyuncs.com/hongfs/env:';
+                }
+                fs.writeFileSync(dockerfilePath, dockerfile.replace('ghcr.io/hongfs/env:', image), 'utf8');
+            }
+        }
+        core.endGroup();
     });
 }
 exports.getSource = getSource;

@@ -116,7 +116,7 @@ Please refer to the [release page](https://github.com/actions/checkout/releases/
     # Default: true
     set-safe-directory: ''
 
-    # 阿里云香港VPC内网
+    # 阿里云香港VPC内网，通过使用自定义构建机，这里是强制 true
     # Default: false
     vpc: ''
 
