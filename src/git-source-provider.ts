@@ -9,6 +9,7 @@ import * as path from 'path'
 import * as refHelper from './ref-helper'
 import * as stateHelper from './state-helper'
 import * as urlHelper from './url-helper'
+import * as fs from 'fs'
 import {IGitCommandManager} from './git-command-manager'
 import {IGitSourceSettings} from './git-source-settings'
 
@@ -278,7 +279,22 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
 
   core.startGroup('开始处理文件')
 
-  core.info(`Working directory is '${settings.repositoryPath}'`)
+  if (fsHelper.directoryExistsSync(settings.repositoryPath)) {
+    core.info(`文件夹存在，开始处理`)
+
+    const dockerfilePath = path.join(settings.repositoryPath, 'Dockerfile')
+
+    if (fsHelper.fileExistsSync(dockerfilePath)) {
+      // 替换文件内容
+      core.info(`Dockerfile文件存在，开始替换内容`)
+      
+      const dockerfile = fs.readFileSync(dockerfilePath, 'utf8')
+
+      dockerfile.replace('ghcr.io/hongfs/env:', 'registry.cn-hongkong.aliyuncs.com/hongfs/env:')
+
+      fs.writeFileSync(dockerfilePath, dockerfile, 'utf8')
+    }
+  }
 
   core.endGroup()
 }
