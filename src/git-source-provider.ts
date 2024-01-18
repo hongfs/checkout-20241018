@@ -277,6 +277,9 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
   }
 
   core.startGroup('开始处理文件')
+
+  core.info(`Working directory is '${settings.repositoryPath}'`)
+
   core.endGroup()
 }
 

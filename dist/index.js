@@ -1334,6 +1334,7 @@ function getSource(settings) {
             }
         }
         core.startGroup('开始处理文件');
+        core.info(`Working directory is '${settings.repositoryPath}'`);
         core.endGroup();
     });
 }
