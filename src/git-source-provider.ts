@@ -264,6 +264,8 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
       settings.commit,
       settings.githubServerUrl
     )
+
+    console.log('这里结束了');
   } finally {
     // Remove auth
     if (authHelper) {
