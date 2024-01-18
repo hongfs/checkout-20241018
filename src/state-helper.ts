@@ -10,6 +10,8 @@ export const IsPost = !!core.getState('isPost')
  */
 export const RepositoryPath = core.getState('repositoryPath')
 
+export const VPC = core.getState('vpc') === 'true'
+
 /**
  * The set-safe-directory for the POST action. The value is set if input: 'safe-directory' is set during the MAIN action.
  */
@@ -30,6 +32,10 @@ export const SshKnownHostsPath = core.getState('sshKnownHostsPath')
  */
 export function setRepositoryPath(repositoryPath: string) {
   core.saveState('repositoryPath', repositoryPath)
+}
+
+export function setVPC(vpc: string) {
+  core.saveState('vpc', vpc)
 }
 
 /**

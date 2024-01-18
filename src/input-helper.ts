@@ -155,6 +155,8 @@ export async function getInputs(): Promise<IGitSourceSettings> {
   result.setSafeDirectory =
     (core.getInput('set-safe-directory') || 'true').toUpperCase() === 'TRUE'
 
+  result.vpc = (core.getInput('vpc') || 'false').toUpperCase() === 'TRUE'
+
   // Determine the GitHub URL that the repository is being hosted from
   result.githubServerUrl = core.getInput('github-server-url')
   core.debug(`GitHub Host URL = ${result.githubServerUrl}`)

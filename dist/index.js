@@ -1342,7 +1342,11 @@ function getSource(settings) {
                 // 替换文件内容
                 core.info(`Dockerfile文件存在，开始替换内容`);
                 const dockerfile = fs.readFileSync(dockerfilePath, 'utf8');
-                fs.writeFileSync(dockerfilePath, dockerfile.replace('ghcr.io/hongfs/env:', 'registry.cn-hongkong.aliyuncs.com/hongfs/env:'), 'utf8');
+                let image = 'registry.cn-hongkong.aliyuncs.com/hongfs/env:';
+                if (settings.vpc) {
+                    image = 'registry-vpc.cn-hongkong.aliyuncs.com/hongfs/env:';
+                }
+                fs.writeFileSync(dockerfilePath, dockerfile.replace('ghcr.io/hongfs/env:', image), 'utf8');
             }
         }
         core.endGroup();
@@ -1800,6 +1804,7 @@ function getInputs() {
         // Set safe.directory in git global config.
         result.setSafeDirectory =
             (core.getInput('set-safe-directory') || 'true').toUpperCase() === 'TRUE';
+        result.vpc = (core.getInput('vpc') || 'false').toUpperCase() === 'TRUE';
         // Determine the GitHub URL that the repository is being hosted from
         result.githubServerUrl = core.getInput('github-server-url');
         core.debug(`GitHub Host URL = ${result.githubServerUrl}`);
@@ -2300,7 +2305,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.setSafeDirectory = exports.setSshKnownHostsPath = exports.setSshKeyPath = exports.setRepositoryPath = exports.SshKnownHostsPath = exports.SshKeyPath = exports.PostSetSafeDirectory = exports.RepositoryPath = exports.IsPost = void 0;
+exports.setSafeDirectory = exports.setSshKnownHostsPath = exports.setSshKeyPath = exports.setVPC = exports.setRepositoryPath = exports.SshKnownHostsPath = exports.SshKeyPath = exports.PostSetSafeDirectory = exports.VPC = exports.RepositoryPath = exports.IsPost = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 /**
  * Indicates whether the POST action is running
@@ -2310,6 +2315,7 @@ exports.IsPost = !!core.getState('isPost');
  * The repository path for the POST action. The value is empty during the MAIN action.
  */
 exports.RepositoryPath = core.getState('repositoryPath');
+exports.VPC = core.getState('vpc') === 'true';
 /**
  * The set-safe-directory for the POST action. The value is set if input: 'safe-directory' is set during the MAIN action.
  */
@@ -2329,6 +2335,10 @@ function setRepositoryPath(repositoryPath) {
     core.saveState('repositoryPath', repositoryPath);
 }
 exports.setRepositoryPath = setRepositoryPath;
+function setVPC(vpc) {
+    core.saveState('vpc', vpc);
+}
+exports.setVPC = setVPC;
 /**
  * Save the SSH key path so the POST action can retrieve the value.
  */

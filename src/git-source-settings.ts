@@ -1,4 +1,6 @@
 export interface IGitSourceSettings {
+  vpc: boolean
+
   /**
    * The location on disk where the repository will be placed
    */

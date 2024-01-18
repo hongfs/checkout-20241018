@@ -287,10 +287,16 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
     if (fsHelper.fileExistsSync(dockerfilePath)) {
       // 替换文件内容
       core.info(`Dockerfile文件存在，开始替换内容`)
-      
+
       const dockerfile = fs.readFileSync(dockerfilePath, 'utf8')
 
-      fs.writeFileSync(dockerfilePath, dockerfile.replace('ghcr.io/hongfs/env:', 'registry.cn-hongkong.aliyuncs.com/hongfs/env:'), 'utf8')
+      let image = 'registry.cn-hongkong.aliyuncs.com/hongfs/env:';
+
+      if(settings.vpc) {
+        image = 'registry-vpc.cn-hongkong.aliyuncs.com/hongfs/env:';
+      }
+
+      fs.writeFileSync(dockerfilePath, dockerfile.replace('ghcr.io/hongfs/env:', image), 'utf8')
     }
   }
 
