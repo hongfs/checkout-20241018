@@ -264,8 +264,6 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
       settings.commit,
       settings.githubServerUrl
     )
-
-    core.info('这里结束了');
   } finally {
     // Remove auth
     if (authHelper) {
@@ -277,6 +275,9 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
       authHelper.removeGlobalConfig()
     }
   }
+
+  core.startGroup('开始处理文件')
+  core.endGroup()
 }
 
 export async function cleanup(repositoryPath: string): Promise<void> {
